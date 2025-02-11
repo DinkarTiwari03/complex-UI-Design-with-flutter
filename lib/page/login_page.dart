@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:pages/page/register_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +12,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool showbiometric =false;
+  @override
+  void initState() {
+    super.initState();
+    final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+    prefs.then((SharedPreferences prefs) {
+      bool isloggedin = prefs.getBool('isloggedin') ?? false;
+      bool isbiometricenabled = prefs.getBool('isbiometricenabled')?? false;
+
+      if(isloggedin && isbiometricenabled){
+        setState(() {
+          showbiometric = true;
+        });
+      } else{
+        setState(() {
+          showbiometric = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
